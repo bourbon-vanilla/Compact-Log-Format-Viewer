@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using LogViewer.JsonLogReader.Models;
 using LogViewer.JsonLogReader.Parser;
@@ -19,6 +20,7 @@ namespace LogViewer.Wpf.Client
         private ObservableCollection<LogMessage> _logMessages;
         private string _currentPageText;
         private string _filterExpression;
+        private LogMessage _selectedLogMessage;
 
 
         public MainWindowVm(ILogParser logParser)
@@ -36,17 +38,6 @@ namespace LogViewer.Wpf.Client
             LastPageCommand = new BoilerCommand(SwitchToLastPageCommandAction);
         }
 
-        private void RemoveFilterExpressionCommandAction()
-        {
-            FilterExpression = string.Empty;
-            SwitchToPage(1);
-        }
-
-        private void ExecuteFilterExpressionCommandAction()
-        {
-            SwitchToPage(1);
-        }
-
 
         public string FilterExpression
         {
@@ -56,6 +47,16 @@ namespace LogViewer.Wpf.Client
                 _filterExpression = value;
                 OnPropertyChanged();
             }
+        }
+
+        public LogMessage SelectedLogMessage 
+        { 
+            get => _selectedLogMessage; 
+            set 
+            {
+                _selectedLogMessage = value;
+                UpdateLogEventDetails();
+            } 
         }
 
         public ICommand RemoveFilterExpressionCommand { get; }
@@ -133,6 +134,22 @@ namespace LogViewer.Wpf.Client
             _pagedLogMessages = _logParser.Search((int) pageNumber, filterExpression: FilterExpression);
             LogMessages = new ObservableCollection<LogMessage>(_pagedLogMessages.Items);
             CurrentPageText = $"{_pagedLogMessages.PageNumber} / {_pagedLogMessages.TotalPages}";
+        }
+
+        private void RemoveFilterExpressionCommandAction()
+        {
+            FilterExpression = string.Empty;
+            SwitchToPage(1);
+        }
+
+        private void ExecuteFilterExpressionCommandAction()
+        {
+            SwitchToPage(1);
+        }
+
+        private void UpdateLogEventDetails()
+        {
+            // TODO Log Event Details View
         }
 
         #endregion

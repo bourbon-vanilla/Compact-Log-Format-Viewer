@@ -29,7 +29,9 @@
             </StackPanel>
         </Grid>
 
-        <ListView x:Name="LogMessagesListView" Grid.Row="1" ItemsSource="{Binding LogMessages}">
+        <ListView x:Name="LogMessagesListView" Grid.Row="1" 
+                  ItemsSource="{Binding LogMessages}" 
+                  SelectedItem="{Binding SelectedLogMessage, Mode=TwoWay}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="3">
