@@ -22,8 +22,8 @@ namespace LogViewer.Server
                 .AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonFormatters();
 
-            new JsonLogReaderServiceModule()
-                .RegisterServices(services);
+            services
+                .AddJsonLogReaderService();
         }
 
         public void Configure(IApplicationBuilder app)
