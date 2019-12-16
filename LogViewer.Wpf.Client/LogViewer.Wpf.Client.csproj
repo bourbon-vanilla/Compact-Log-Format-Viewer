@@ -10,4 +10,10 @@
     <ProjectReference Include="..\LogViewer.JsonLogReader\LogViewer.JsonLogReader.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Temp\UmbracoTraceLog.UNITTEST.20181112.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
