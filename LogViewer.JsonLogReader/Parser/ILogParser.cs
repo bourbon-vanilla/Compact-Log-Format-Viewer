@@ -1,9 +1,9 @@
-﻿using LogViewer.Server.Models;
+﻿using System.Collections.Generic;
+using LogViewer.JsonLogReader.Models;
 using Serilog.Core;
 using Serilog.Events;
-using System.Collections.Generic;
 
-namespace LogViewer.Server
+namespace LogViewer.JsonLogReader.Parser
 {
     public interface ILogParser
     {
@@ -12,6 +12,8 @@ namespace LogViewer.Server
         string LogFilePath { get; set; }
 
         List<LogEvent> ReadLogs(string filePath, Logger logger = null);
+
+        void ReadLogsTemp(string filePath);
 
         LogLevelCounts TotalCounts();
 

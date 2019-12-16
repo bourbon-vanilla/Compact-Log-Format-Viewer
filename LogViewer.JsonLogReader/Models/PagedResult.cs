@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace LogViewer.Server.Models
+namespace LogViewer.JsonLogReader.Models
 {
     /// <summary>
     /// Represents a paged result for a model collection

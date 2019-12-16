@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LogViewer.Server.Models;
+using LogViewer.JsonLogReader.Models;
 
-namespace LogViewer.Server.Extensions
+namespace LogViewer.JsonLogReader.Extensions
 {
-    public static class EnumerableExtensions
+    internal static class EnumerableExtensions
     {
         /// <summary>
         /// Returns true if the source contains any of the items in the other list

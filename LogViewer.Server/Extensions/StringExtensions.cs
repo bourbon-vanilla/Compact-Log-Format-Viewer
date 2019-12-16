@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LogViewer.Server.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static bool IsValidJson(this string stringValue)
         {

@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.28701.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogViewer.Server.Tests", "LogViewer.Server.Tests\LogViewer.Server.Tests.csproj", "{9C16F2E3-5886-4895-A6C3-65A00840D51A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogViewer.Server", "LogViewer.Server\LogViewer.Server.csproj", "{C3F86383-D548-41F5-AD5A-1ED91611048E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogViewer.Server", "LogViewer.Server\LogViewer.Server.csproj", "{C3F86383-D548-41F5-AD5A-1ED91611048E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogViewer.JsonLogReader", "LogViewer.JsonLogReader\LogViewer.JsonLogReader.csproj", "{07E90916-1063-4C0B-B741-64375CFA2D18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C3F86383-D548-41F5-AD5A-1ED91611048E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3F86383-D548-41F5-AD5A-1ED91611048E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3F86383-D548-41F5-AD5A-1ED91611048E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E90916-1063-4C0B-B741-64375CFA2D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E90916-1063-4C0B-B741-64375CFA2D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E90916-1063-4C0B-B741-64375CFA2D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E90916-1063-4C0B-B741-64375CFA2D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
