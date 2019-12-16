@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using LogViewer.JsonLogReader.Models;
 using LogViewer.JsonLogReader.Parser;
@@ -21,13 +22,15 @@ namespace LogViewer.Wpf.Client
         private string _currentPageText;
         private string _filterExpression;
         private LogMessage _selectedLogMessage;
-
+        private bool _logEventSelected;
+        private ObservableCollection<LogEventProperty> _selectedLogEventProperties;
 
         public MainWindowVm(ILogParser logParser)
         {
             _logParser = logParser;
             _logParser.ReadLogsTemp(TEMP_LOG_FILE_PATH);
             SwitchToPage(1);
+            UpdateLogEventDetails(null);
 
             RemoveFilterExpressionCommand = new BoilerCommand(RemoveFilterExpressionCommandAction);
             ExecuteFilterExpressionCommand = new BoilerCommand(ExecuteFilterExpressionCommandAction);
@@ -55,8 +58,29 @@ namespace LogViewer.Wpf.Client
             set 
             {
                 _selectedLogMessage = value;
-                UpdateLogEventDetails();
+                
+                UpdateLogEventDetails(_selectedLogMessage);
             } 
+        }
+
+        public ObservableCollection<LogEventProperty> SelectedLogEventProperties
+        {
+            get => _selectedLogEventProperties;
+            set
+            {
+                _selectedLogEventProperties = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool LogEventSelected
+        {
+            get => _logEventSelected;
+            set
+            {
+                _logEventSelected = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand RemoveFilterExpressionCommand { get; }
@@ -147,12 +171,32 @@ namespace LogViewer.Wpf.Client
             SwitchToPage(1);
         }
 
-        private void UpdateLogEventDetails()
+        private void UpdateLogEventDetails(LogMessage logMessage)
         {
-            // TODO Log Event Details View
+            if (logMessage == null)
+            {
+                LogEventSelected = false;
+
+                SelectedLogEventProperties = new ObservableCollection<LogEventProperty>();
+            }
+            else 
+            { 
+                LogEventSelected = true;
+
+                var logEventProperties = logMessage.Properties
+                        .Select(x => new LogEventProperty() { Name = x.Key, Value = x.Value.ToString() });
+
+                SelectedLogEventProperties = new ObservableCollection<LogEventProperty>(
+                    logEventProperties);
+            }
         }
 
         #endregion
     }
 
+    internal class LogEventProperty
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
 }

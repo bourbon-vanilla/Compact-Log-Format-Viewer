@@ -11,6 +11,7 @@
         <converter:TimeToFormattedStringConverter x:Key="TimeToFormattedStringConverter" />
         <converter:LevelToBackgroundConverter x:Key="LevelToBackgroundConverter" />
         <converter:EnumToStringConverter x:Key="EnumToStringConverter" />
+        <converter:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     </Window.Resources>
     
     <Grid>
@@ -73,5 +74,23 @@
                            HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>
+
+        <Grid Grid.Row="3"
+              Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}">
+            <ListView ItemsSource="{Binding SelectedLogEventProperties}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" 
+                                       Margin="5,0" 
+                                       Width="150"/>
+                            <TextBlock Text="{Binding Value}"
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        
     </Grid>
 </Window>
