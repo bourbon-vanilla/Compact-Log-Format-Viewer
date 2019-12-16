@@ -7,8 +7,7 @@ namespace LogViewer.JsonLogReader
     {
         public static IServiceCollection AddJsonLogReaderService(this IServiceCollection services)
         {
-            services.AddSingleton<ILogParser, LogParser>();
-            return services;
+            return services.AddSingleton<ILogParser, LogParser>();
         }
     }
 }
