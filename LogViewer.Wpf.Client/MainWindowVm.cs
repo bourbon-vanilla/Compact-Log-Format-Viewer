@@ -118,6 +118,19 @@ namespace LogViewer.Wpf.Client
 
         public ICommand LastPageCommand { get; }
 
+        [Obsolete("This is a hack for prototype purposes to call file open from code behind")]
+        public void OpenLogFile(string logFilePath)
+        {
+            if (string.IsNullOrEmpty(logFilePath))
+                throw new ArgumentNullException(nameof(logFilePath));
+
+            if (!File.Exists(logFilePath))
+                throw new ArgumentOutOfRangeException(nameof(logFilePath));
+
+            _logParser.ReadLogsTemp(logFilePath);
+            SwitchToPage(1);
+            UpdateLogEventDetails(null);
+        }
 
         #region PRIVATE METHODS
 
@@ -168,9 +181,7 @@ namespace LogViewer.Wpf.Client
             if (!GetFilePathFromUiDialog(out var openFilePath)) 
                 return;
 
-            _logParser.ReadLogsTemp(openFilePath);
-            SwitchToPage(1);
-            UpdateLogEventDetails(null);
+            OpenLogFile(openFilePath);
         }
 
         private void RemoveFilterExpressionCommandAction()
@@ -233,6 +244,7 @@ namespace LogViewer.Wpf.Client
         }
 
         #endregion
+
     }
 
     internal class LogEventProperty

@@ -14,7 +14,8 @@
         <converter:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     </Window.Resources>
     
-    <Grid>
+    <Grid Drop="UIElement_OnDrop" AllowDrop="True">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
             <RowDefinition Height="120" />
