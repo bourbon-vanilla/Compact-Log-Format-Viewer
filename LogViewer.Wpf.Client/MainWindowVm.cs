@@ -237,7 +237,8 @@ namespace LogViewer.Wpf.Client
         {
             _pagedLogMessages = _logParser.Search((int) pageNumber, filterExpression: FilterExpression);
             LogMessages = new ObservableCollection<LogMessage>(_pagedLogMessages.Items);
-            CurrentPageText = $"{_pagedLogMessages.PageNumber} / {_pagedLogMessages.TotalPages}";
+            var processedPageNumber = _pagedLogMessages.TotalPages == 0 ? 0 : _pagedLogMessages.PageNumber;
+            CurrentPageText = $"{processedPageNumber} / {_pagedLogMessages.TotalPages}";
 
             UpdateNavigationCommands();
             UpdateFilterCommands();

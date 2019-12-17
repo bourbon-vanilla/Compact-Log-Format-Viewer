@@ -96,10 +96,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="3">
-                                <Grid Width="150">
                                     <TextBlock Text="{Binding Timestamp,Converter={StaticResource TimeToFormattedStringConverter}}"
+                                               Width="120"
                                                FontSize="12"/>
-                                </Grid>
                                 <Grid Width="80">
                                     <Border Background="{Binding Level, Converter={StaticResource LevelToBackgroundConverter}}" CornerRadius="3" HorizontalAlignment="Center" >
                                         <TextBlock Text="{Binding Level, Converter={StaticResource EnumToStringConverter}}" 
@@ -110,7 +109,8 @@
                                     </Border>
                                 </Grid>
                                 <TextBlock Text="{Binding RenderedMessage}"
-                                           FontSize="12"/>
+                                           FontSize="12"
+                                           Margin="8,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

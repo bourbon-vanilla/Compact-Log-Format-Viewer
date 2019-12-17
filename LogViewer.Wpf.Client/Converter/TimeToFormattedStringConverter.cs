@@ -9,7 +9,8 @@ namespace LogViewer.Wpf.Client.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var time = (DateTimeOffset)value;
-            return time.ToString("yyyy'.'MM'.'dd' 'HH':'mm':'ss'.'fff");
+            var formattedTimeString = time.ToString("dd' 'MMM', 'H':'mm':'ss'.'fff");
+            return formattedTimeString;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
