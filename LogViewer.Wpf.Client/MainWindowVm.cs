@@ -14,6 +14,7 @@ namespace LogViewer.Wpf.Client
 {
     internal class MainWindowVm : BoilerVm
     {
+        private const string EXCEPTION = "Exception";
         private readonly ILogParser _logParser;
         private PagedResult<LogMessage> _pagedLogMessages;
         private string _openFileDialogDirectory;
@@ -26,6 +27,7 @@ namespace LogViewer.Wpf.Client
         private bool _logEventSelected;
         private ObservableCollection<LogEventProperty> _selectedLogEventProperties;
         private string _openFilePath;
+        private LogEventProperty _selectedLogEventProperty;
 
 
         public MainWindowVm(ILogParser logParser)
@@ -95,6 +97,30 @@ namespace LogViewer.Wpf.Client
             }
         }
 
+        public LogEventProperty SelectedLogEventProperty
+        {
+            get => _selectedLogEventProperty;
+            set
+            {
+                _selectedLogEventProperty = value;
+                OnPropertyChanged();
+                SetFilterExpression(_selectedLogEventProperty);
+            }
+        }
+
+        private void SetFilterExpression(LogEventProperty selectedLogEventProperty)
+        {
+            if (selectedLogEventProperty == null) 
+                return;
+
+            if (selectedLogEventProperty.Name == EXCEPTION)
+                return;
+
+            var processedValue = selectedLogEventProperty.Value.Replace("\"", "'");
+
+            FilterExpression = $"{selectedLogEventProperty.Name} = {processedValue}";
+        }
+
         public ICommand OpenFileDialogCommand { get; }
 
         public ICommand RemoveFilterExpressionCommand { get; }
@@ -138,11 +164,14 @@ namespace LogViewer.Wpf.Client
             if (!File.Exists(logFilePath))
                 throw new ArgumentOutOfRangeException(nameof(logFilePath));
 
+            FilterExpression = string.Empty;
+
             _logParser.ReadLogsTemp(logFilePath);
             SwitchToPage(1);
             UpdateLogEventDetails(null);
             OpenFilePath = logFilePath;
         }
+
 
         #region PRIVATE METHODS
 
@@ -260,12 +289,12 @@ namespace LogViewer.Wpf.Client
                 LogEventSelected = true;
 
                 var logEventProperties = logMessage.Properties
-                        .Select(x => new LogEventProperty { Name = x.Key, Value = x.Value.ToString() })
+                        .Select(x => new LogEventProperty ( x.Key, x.Value.ToString() ))
                         .ToList();
 
                 if (!string.IsNullOrEmpty(logMessage.Exception))
                 {
-                    logEventProperties.Add(new LogEventProperty{Name = "Exception", Value = logMessage.Exception});
+                    logEventProperties.Add(new LogEventProperty( EXCEPTION, logMessage.Exception));
                 }
 
                 SelectedLogEventProperties = new ObservableCollection<LogEventProperty>(
@@ -301,7 +330,20 @@ namespace LogViewer.Wpf.Client
 
     internal class LogEventProperty
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
+
+        public LogEventProperty(string name, string value)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentNullException(nameof(value));
+
+            Name = name;
+            Value = value;
+        }
+
+        public string Name { get; }
+        public string Value { get; }
     }
 }

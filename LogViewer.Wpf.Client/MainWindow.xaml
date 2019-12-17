@@ -33,6 +33,7 @@
                 HorizontalAlignment="Left"
                 Command="{Binding OpenFileDialogCommand}"/>
 
+        <!--Filter-->
         <Grid Grid.Row="1">
             <Border CornerRadius="10" 
                     BorderThickness="0"
@@ -65,6 +66,7 @@
             </Border>
         </Grid>
 
+        <!--Log Events List-->
         <Border Grid.Row="2" 
                 CornerRadius="10" 
                 BorderThickness="0"
@@ -138,6 +140,7 @@
 
         <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
 
+        <!--Log Event Details-->
         <Border Grid.Row="4" 
                 Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}"
                 CornerRadius="10" 
@@ -157,6 +160,7 @@
                            Margin="16, 10" />
                 <Grid Grid.Row="1">
                     <ListView ItemsSource="{Binding SelectedLogEventProperties}"
+                              SelectedItem="{Binding SelectedLogEventProperty, Mode=TwoWay}"
                               BorderThickness="0"
                               Padding="5">
                         <ListView.ItemTemplate>
