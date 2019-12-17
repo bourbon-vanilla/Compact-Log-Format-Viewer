@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:LogViewer.Wpf.Client"
         xmlns:converter="clr-namespace:LogViewer.Wpf.Client.Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1200">
+        Title="{Binding OpenFilePath}" Height="800" Width="1200"
+        >
     <Window.Resources>
         <converter:TimeToFormattedStringConverter x:Key="TimeToFormattedStringConverter" />
         <converter:LevelToBackgroundConverter x:Key="LevelToBackgroundConverter" />
@@ -14,7 +15,7 @@
         <converter:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
     </Window.Resources>
     
-    <Grid Drop="UIElement_OnDrop" AllowDrop="True">
+    <Grid Background="AliceBlue">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
@@ -49,16 +50,16 @@
                                Margin="16, 10"/>
                     <StackPanel Grid.Row="1" 
                                 Orientation="Horizontal" 
-                                HorizontalAlignment="Stretch" 
                                 Margin="16,0"
                                 Height="30" >
                         <TextBox Text="{Binding FilterExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                  Width="600" 
                                  FontSize="14"
                                  Padding="5,0"
-                                 VerticalContentAlignment="Center"/>
+                                 VerticalContentAlignment="Center"
+                                 BorderThickness="1,1,0,1" />
                         <Button Width="25" Content="X" Command="{Binding RemoveFilterExpressionCommand}" BorderThickness="0,1,0,1" />
-                        <Button Width="50" Content="Filter" Command="{Binding ExecuteFilterExpressionCommand}" />
+                        <Button Width="50" Content="Filter" Command="{Binding ExecuteFilterExpressionCommand}" BorderThickness="0,1,1,1" />
                     </StackPanel>
                 </Grid>
             </Border>
@@ -71,7 +72,7 @@
                 Margin="16,8"
                 Padding="1,1">
 
-            <Grid>
+            <Grid Drop="UIElement_OnDrop" AllowDrop="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50" />
                     <RowDefinition Height="*" />

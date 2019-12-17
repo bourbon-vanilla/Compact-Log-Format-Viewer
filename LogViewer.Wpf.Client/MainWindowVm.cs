@@ -25,7 +25,8 @@ namespace LogViewer.Wpf.Client
         private LogMessage _selectedLogMessage;
         private bool _logEventSelected;
         private ObservableCollection<LogEventProperty> _selectedLogEventProperties;
-        
+        private string _openFilePath;
+
 
         public MainWindowVm(ILogParser logParser)
         {
@@ -33,15 +34,24 @@ namespace LogViewer.Wpf.Client
 
             OpenFileDialogCommand = new BoilerCommand(OpenFileDialogCommandAction);
 
-            RemoveFilterExpressionCommand = new BoilerCommand(RemoveFilterExpressionCommandAction);
-            ExecuteFilterExpressionCommand = new BoilerCommand(ExecuteFilterExpressionCommandAction);
+            RemoveFilterExpressionCommand = new BoilerCommand(RemoveFilterExpressionCommandAction, IsOpenAndFilterSet);
+            ExecuteFilterExpressionCommand = new BoilerCommand(ExecuteFilterExpressionCommandAction, IsOpenAndFilterSet);
 
-            FirstPageCommand = new BoilerCommand(SwitchToFirstPageCommandAction);
-            PreviousPageCommand = new BoilerCommand(SwitchToPreviousPageCommandAction);
-            NextPageCommand = new BoilerCommand(SwitchToNextPageCommandAction);
-            LastPageCommand = new BoilerCommand(SwitchToLastPageCommandAction);
+            FirstPageCommand = new BoilerCommand(SwitchToFirstPageCommandAction, IsOpenAndNotFirstPage);
+            PreviousPageCommand = new BoilerCommand(SwitchToPreviousPageCommandAction, IsOpenAndNotFirstPage);
+            NextPageCommand = new BoilerCommand(SwitchToNextPageCommandAction, IsOpenAndNotLastPage);
+            LastPageCommand = new BoilerCommand(SwitchToLastPageCommandAction, IsOpenAndNotLastPage);
         }
 
+        public string OpenFilePath
+        {
+            get => _openFilePath;
+            set
+            {
+                _openFilePath = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string FilterExpression
         {
@@ -50,6 +60,7 @@ namespace LogViewer.Wpf.Client
             {
                 _filterExpression = value;
                 OnPropertyChanged();
+                UpdateFilterCommands();
             }
         }
 
@@ -130,13 +141,14 @@ namespace LogViewer.Wpf.Client
             _logParser.ReadLogsTemp(logFilePath);
             SwitchToPage(1);
             UpdateLogEventDetails(null);
+            OpenFilePath = logFilePath;
         }
 
         #region PRIVATE METHODS
 
         private void SwitchToFirstPageCommandAction()
         {
-            if (_pagedLogMessages.PageNumber == 1)
+            if (!IsOpenAndNotFirstPage())
                 return;
 
             SwitchToPage(1);
@@ -144,7 +156,7 @@ namespace LogViewer.Wpf.Client
 
         private void SwitchToPreviousPageCommandAction()
         {
-            if (_pagedLogMessages.PageNumber <= 1)
+            if (!IsOpenAndNotFirstPage())
                 return;
 
             var pageNumber = _pagedLogMessages.PageNumber - 1;
@@ -153,7 +165,7 @@ namespace LogViewer.Wpf.Client
 
         private void SwitchToNextPageCommandAction()
         {
-            if (_pagedLogMessages.PageNumber >= _pagedLogMessages.TotalPages)
+            if (!IsOpenAndNotLastPage())
                 return;
 
             var pageNumber = _pagedLogMessages.PageNumber + 1;
@@ -162,11 +174,34 @@ namespace LogViewer.Wpf.Client
 
         private void SwitchToLastPageCommandAction()
         {
-            if (_pagedLogMessages.PageNumber == _pagedLogMessages.TotalPages)
+            if (!IsOpenAndNotLastPage())
                 return;
 
             var pageNumber = _pagedLogMessages.TotalPages;
             SwitchToPage(pageNumber);
+        }
+
+        private bool IsOpenAndNotFirstPage()
+        {
+            return IsOpen() && 
+                   _pagedLogMessages.PageNumber > 1;
+        }
+
+        private bool IsOpenAndNotLastPage()
+        {
+            return IsOpen() &&
+                   _pagedLogMessages.PageNumber < _pagedLogMessages.TotalPages;
+        }
+
+        private bool IsOpenAndFilterSet()
+        {
+            return IsOpen() &&
+                   !string.IsNullOrEmpty(FilterExpression);
+        }
+
+        private bool IsOpen()
+        {
+            return _pagedLogMessages != null;
         }
 
         private void SwitchToPage(long pageNumber)
@@ -174,6 +209,23 @@ namespace LogViewer.Wpf.Client
             _pagedLogMessages = _logParser.Search((int) pageNumber, filterExpression: FilterExpression);
             LogMessages = new ObservableCollection<LogMessage>(_pagedLogMessages.Items);
             CurrentPageText = $"{_pagedLogMessages.PageNumber} / {_pagedLogMessages.TotalPages}";
+
+            UpdateNavigationCommands();
+            UpdateFilterCommands();
+        }
+
+        private void UpdateNavigationCommands()
+        {
+            ((BoilerCommand)FirstPageCommand).RaiseCanExecuteChanged();
+            ((BoilerCommand)PreviousPageCommand).RaiseCanExecuteChanged();
+            ((BoilerCommand)NextPageCommand).RaiseCanExecuteChanged();
+            ((BoilerCommand)LastPageCommand).RaiseCanExecuteChanged();
+        }
+
+        private void UpdateFilterCommands()
+        {
+            ((BoilerCommand)RemoveFilterExpressionCommand).RaiseCanExecuteChanged();
+            ((BoilerCommand)ExecuteFilterExpressionCommand).RaiseCanExecuteChanged();
         }
 
         private void OpenFileDialogCommandAction()
