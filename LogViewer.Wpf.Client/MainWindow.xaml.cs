@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using LogViewer.JsonLogReader.Parser;
+
 
 namespace LogViewer.Wpf.Client
 {
@@ -20,9 +11,29 @@ namespace LogViewer.Wpf.Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainWindowVm _vm;
+
         public MainWindow()
         {
             InitializeComponent();
+            _vm = new MainWindowVm(new LogParser()); // TODO: After prototype done make LogParser internal and do it via dependency injection
+            DataContext = _vm;
+        }
+
+        private void UIElement_OnDrop(object sender, DragEventArgs e)
+        {
+            var filesPresent = e.Data.GetDataPresent(DataFormats.FileDrop);
+            if (!filesPresent)
+                return;
+
+            var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
+
+            if (files == null || files.Length > 1)
+                throw new ArgumentOutOfRangeException(nameof(e));
+
+            var fileToOpen = files.First();
+
+            _vm.OpenLogFile(fileToOpen); // TODO: This is a hack for prototype purposes - add dependency property to handle this
         }
     }
 }
