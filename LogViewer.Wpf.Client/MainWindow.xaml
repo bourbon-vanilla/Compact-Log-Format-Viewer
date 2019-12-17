@@ -17,33 +17,45 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="120" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
             <RowDefinition Height="248" />
         </Grid.RowDefinitions>
 
         <Button Grid.Row="0"
                 Content="Open file..."
                 Width="80"
-                Margin="3"
+                Margin="16, 0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
                 Command="{Binding OpenFileDialogCommand}"/>
 
         <Grid Grid.Row="1">
             <Border CornerRadius="10" 
-                    HorizontalAlignment="Stretch"
                     BorderThickness="0"
-                    Background="AntiqueWhite"
+                    Background="LightBlue"
                     Margin="16,8"
-                    Padding="16,8">
+                    Padding="1,1">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
+                        <RowDefinition Height="50" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Filtering"
-                               FontSize="20"/>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Height="30" >
-                        <TextBox Text="{Binding FilterExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="500" />
+                    <TextBlock Grid.Row="0" 
+                               Text="Filtering"
+                               FontSize="20"
+                               Margin="16, 10"/>
+                    <StackPanel Grid.Row="1" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Stretch" 
+                                Margin="16,0"
+                                Height="30" >
+                        <TextBox Text="{Binding FilterExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Width="600" 
+                                 FontSize="14"
+                                 Padding="5,0"
+                                 VerticalContentAlignment="Center"/>
                         <Button Width="25" Content="X" Command="{Binding RemoveFilterExpressionCommand}" BorderThickness="0,1,0,1" />
                         <Button Width="50" Content="Filter" Command="{Binding ExecuteFilterExpressionCommand}" />
                     </StackPanel>
@@ -53,25 +65,27 @@
 
         <Border Grid.Row="2" 
                 CornerRadius="10" 
-                HorizontalAlignment="Stretch"
                 BorderThickness="0"
-                Background="AntiqueWhite"
+                Background="LightBlue"
                 Margin="16,8"
-                Padding="16,8">
+                Padding="1,1">
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="64" />
+                    <RowDefinition Height="56" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
                            Text="Logs Page"
-                           FontSize="20"/>
+                           FontSize="20"
+                           Margin="16, 10"/>
 
                 <ListView Grid.Row="1"
                           x:Name="LogMessagesListView" 
+                          BorderThickness="0"
+                          Padding="5"
                           ItemsSource="{Binding LogMessages}" 
                           SelectedItem="{Binding SelectedLogMessage, Mode=TwoWay}">
 
@@ -98,9 +112,9 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Grid Grid.Row="2" Margin="0,8,0,0">
+                <Grid Grid.Row="2" >
                     <StackPanel HorizontalAlignment="Center"
-                                VerticalAlignment="Center" Height="50">
+                                VerticalAlignment="Center" >
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
                             <Button Command="{Binding FirstPageCommand}"
@@ -120,24 +134,29 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="3" 
+        <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
+
+        <Border Grid.Row="4" 
                 Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}"
                 CornerRadius="10" 
                 BorderThickness="0"
-                Background="AntiqueWhite"
+                Background="BurlyWood"
                 Margin="16,8"
-                Padding="16,8">
+                Padding="1,1">
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
                            Text="Log Details"
-                           FontSize="20"/>
+                           FontSize="20"
+                           Margin="16, 10" />
                 <Grid Grid.Row="1">
-                    <ListView ItemsSource="{Binding SelectedLogEventProperties}" >
+                    <ListView ItemsSource="{Binding SelectedLogEventProperties}"
+                              BorderThickness="0"
+                              Padding="5">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

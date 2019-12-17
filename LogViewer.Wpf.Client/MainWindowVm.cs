@@ -168,19 +168,12 @@ namespace LogViewer.Wpf.Client
 
         private void OpenFileDialogCommandAction()
         {
-            string openFilePath;
-            if (GetFilePathFromUiDialog(out openFilePath))
-            {
-                _logParser.ReadLogsTemp(openFilePath);
-                SwitchToPage(1);
-                UpdateLogEventDetails(null);
-            }
-            else
-            {
-                _logParser.ReadLogsTemp(openFilePath);
-                SwitchToPage(1);
-                UpdateLogEventDetails(null);
-            }
+            if (!GetFilePathFromUiDialog(out var openFilePath)) 
+                return;
+
+            _logParser.ReadLogsTemp(openFilePath);
+            SwitchToPage(1);
+            UpdateLogEventDetails(null);
         }
 
         private void RemoveFilterExpressionCommandAction()
@@ -224,18 +217,16 @@ namespace LogViewer.Wpf.Client
                 };
 
             // Show open file dialog box
-            var result = openFileDialog.ShowDialog();
-            if (result != true)
-            {
-                localFileName = TEMP_LOG_FILE_PATH;
-                return false;
-            }
-            else
+            var fileSelected = openFileDialog.ShowDialog();
+            if (fileSelected == true)
             {
                 localFileName = openFileDialog.FileName;
                 _openFileDialogDirectory = Path.GetDirectoryName(localFileName);
+                return true;
             }
-            return true;
+
+            localFileName = null;
+            return false;
         }
 
         #endregion
