@@ -16,12 +16,19 @@
     
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
             <RowDefinition Height="248" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Button Grid.Row="0"
+                Content="Open file..."
+                Width="80"
+                Margin="3"
+                Command="{Binding OpenFileDialogCommand}"/>
+
+        <Grid Grid.Row="1">
             <Border CornerRadius="10" 
                     HorizontalAlignment="Stretch"
                     BorderThickness="0"
@@ -44,7 +51,7 @@
             </Border>
         </Grid>
 
-        <Border Grid.Row="1" 
+        <Border Grid.Row="2" 
                 CornerRadius="10" 
                 HorizontalAlignment="Stretch"
                 BorderThickness="0"
@@ -113,7 +120,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="2" 
+        <Border Grid.Row="3" 
                 Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}"
                 CornerRadius="10" 
                 BorderThickness="0"

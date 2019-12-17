@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using LogViewer.JsonLogReader.Models;
 using LogViewer.JsonLogReader.Parser;
+using LogViewer.Wpf.Client.Helper;
 using LogViewer.Wpf.Client.VmBoiler;
+using Microsoft.Win32;
 
 
 namespace LogViewer.Wpf.Client
@@ -16,6 +19,7 @@ namespace LogViewer.Wpf.Client
 
         private readonly ILogParser _logParser;
         private PagedResult<LogMessage> _pagedLogMessages;
+        private string _openFileDialogDirectory;
 
         // Property backing fields
         private ObservableCollection<LogMessage> _logMessages;
@@ -24,13 +28,13 @@ namespace LogViewer.Wpf.Client
         private LogMessage _selectedLogMessage;
         private bool _logEventSelected;
         private ObservableCollection<LogEventProperty> _selectedLogEventProperties;
+        
 
         public MainWindowVm(ILogParser logParser)
         {
             _logParser = logParser;
-            _logParser.ReadLogsTemp(TEMP_LOG_FILE_PATH);
-            SwitchToPage(1);
-            UpdateLogEventDetails(null);
+
+            OpenFileDialogCommand = new BoilerCommand(OpenFileDialogCommandAction);
 
             RemoveFilterExpressionCommand = new BoilerCommand(RemoveFilterExpressionCommandAction);
             ExecuteFilterExpressionCommand = new BoilerCommand(ExecuteFilterExpressionCommandAction);
@@ -82,6 +86,8 @@ namespace LogViewer.Wpf.Client
                 OnPropertyChanged();
             }
         }
+
+        public ICommand OpenFileDialogCommand { get; }
 
         public ICommand RemoveFilterExpressionCommand { get; }
 
@@ -160,6 +166,23 @@ namespace LogViewer.Wpf.Client
             CurrentPageText = $"{_pagedLogMessages.PageNumber} / {_pagedLogMessages.TotalPages}";
         }
 
+        private void OpenFileDialogCommandAction()
+        {
+            string openFilePath;
+            if (GetFilePathFromUiDialog(out openFilePath))
+            {
+                _logParser.ReadLogsTemp(openFilePath);
+                SwitchToPage(1);
+                UpdateLogEventDetails(null);
+            }
+            else
+            {
+                _logParser.ReadLogsTemp(openFilePath);
+                SwitchToPage(1);
+                UpdateLogEventDetails(null);
+            }
+        }
+
         private void RemoveFilterExpressionCommandAction()
         {
             FilterExpression = string.Empty;
@@ -189,6 +212,30 @@ namespace LogViewer.Wpf.Client
                 SelectedLogEventProperties = new ObservableCollection<LogEventProperty>(
                     logEventProperties);
             }
+        }
+
+        private bool GetFilePathFromUiDialog(out string localFileName)
+        {
+            _openFileDialogDirectory = _openFileDialogDirectory ?? Environment.CurrentDirectory;
+            var  openFileDialog = new OpenFileDialog
+                {
+                    InitialDirectory = _openFileDialogDirectory,
+                    Filter = SystemDialog.GetOpenFileDialogFilterString(new []{"json", "clef"})
+                };
+
+            // Show open file dialog box
+            var result = openFileDialog.ShowDialog();
+            if (result != true)
+            {
+                localFileName = TEMP_LOG_FILE_PATH;
+                return false;
+            }
+            else
+            {
+                localFileName = openFileDialog.FileName;
+                _openFileDialogDirectory = Path.GetDirectoryName(localFileName);
+            }
+            return true;
         }
 
         #endregion
