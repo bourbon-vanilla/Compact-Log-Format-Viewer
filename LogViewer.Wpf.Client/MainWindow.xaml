@@ -164,7 +164,8 @@
                                                Margin="5,0" 
                                                Width="150"/>
                                     <TextBlock Text="{Binding Value}"
-                                               FontWeight="Bold"/>
+                                               FontWeight="Bold"
+                                               FontFamily="Consolas"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>

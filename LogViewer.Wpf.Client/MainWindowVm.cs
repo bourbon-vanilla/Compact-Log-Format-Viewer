@@ -14,9 +14,6 @@ namespace LogViewer.Wpf.Client
 {
     internal class MainWindowVm : BoilerVm
     {
-        private const string TEMP_LOG_FILE_PATH =
-            @"Temp\UmbracoTraceLog.UNITTEST.20181112.json";
-
         private readonly ILogParser _logParser;
         private PagedResult<LogMessage> _pagedLogMessages;
         private string _openFileDialogDirectory;
@@ -200,7 +197,13 @@ namespace LogViewer.Wpf.Client
                 LogEventSelected = true;
 
                 var logEventProperties = logMessage.Properties
-                        .Select(x => new LogEventProperty() { Name = x.Key, Value = x.Value.ToString() });
+                        .Select(x => new LogEventProperty { Name = x.Key, Value = x.Value.ToString() })
+                        .ToList();
+
+                if (!string.IsNullOrEmpty(logMessage.Exception))
+                {
+                    logEventProperties.Add(new LogEventProperty{Name = "Exception", Value = logMessage.Exception});
+                }
 
                 SelectedLogEventProperties = new ObservableCollection<LogEventProperty>(
                     logEventProperties);
