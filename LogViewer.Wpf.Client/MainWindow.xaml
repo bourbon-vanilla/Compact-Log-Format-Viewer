@@ -18,79 +18,135 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="200" />
+            <RowDefinition Height="248" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Height="30">
-                <TextBox Text="{Binding FilterExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="500" />
-                <Button Width="25" Content="X" Command="{Binding RemoveFilterExpressionCommand}" />
-                <Button Width="50" Content="Filter" Command="{Binding ExecuteFilterExpressionCommand}" />
-            </StackPanel>
-        </Grid>
-
-        <ListView x:Name="LogMessagesListView" Grid.Row="1" 
-                  ItemsSource="{Binding LogMessages}" 
-                  SelectedItem="{Binding SelectedLogMessage, Mode=TwoWay}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="3">
-                        <Grid Width="150">
-                            <TextBlock Text="{Binding Timestamp,Converter={StaticResource TimeToFormattedStringConverter}}"
-                                       FontSize="12"/>
-                        </Grid>
-                        <Grid Width="80">
-                            <Border Background="{Binding Level, Converter={StaticResource LevelToBackgroundConverter}}" CornerRadius="3" HorizontalAlignment="Center" >
-                                <TextBlock Text="{Binding Level, Converter={StaticResource EnumToStringConverter}}" 
-                                           FontWeight="Bold" 
-                                           FontSize="10"
-                                           HorizontalAlignment="Center" 
-                                           Padding="3,0" />
-                            </Border>
-                        </Grid>
-                        <TextBlock Text="{Binding RenderedMessage}"
-                                   FontSize="12"/>
+            <Border CornerRadius="10" 
+                    HorizontalAlignment="Stretch"
+                    BorderThickness="0"
+                    Background="AntiqueWhite"
+                    Margin="16,8"
+                    Padding="16,8">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Filtering"
+                               FontSize="20"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Height="30" >
+                        <TextBox Text="{Binding FilterExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="500" />
+                        <Button Width="25" Content="X" Command="{Binding RemoveFilterExpressionCommand}" BorderThickness="0,1,0,1" />
+                        <Button Width="50" Content="Filter" Command="{Binding ExecuteFilterExpressionCommand}" />
                     </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <Grid Grid.Row="2">
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <Button Command="{Binding FirstPageCommand}"
-                            Content="First Page" Width="70" Margin="3,0" />
-                    <Button Command="{Binding PreviousPageCommand}"
-                            Content="Prev Page" Width="70" Margin="3,0" />
-                    <Button Command="{Binding NextPageCommand}"
-                            Content="Next Page" Width="70" Margin="3,0" />
-                    <Button Command="{Binding LastPageCommand}"
-                            Content="Last Page" Width="70" Margin="3,0" />
-                </StackPanel>
-                <TextBlock Text="{Binding CurrentPageText}"
-                           HorizontalAlignment="Center"/>
-            </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
 
-        <Grid Grid.Row="3"
-              Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}">
-            <ListView ItemsSource="{Binding SelectedLogEventProperties}" >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" 
-                                       Margin="5,0" 
-                                       Width="150"/>
-                            <TextBlock Text="{Binding Value}"
-                                       FontWeight="Bold"/>
+        <Border Grid.Row="1" 
+                CornerRadius="10" 
+                HorizontalAlignment="Stretch"
+                BorderThickness="0"
+                Background="AntiqueWhite"
+                Margin="16,8"
+                Padding="16,8">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="64" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Logs Page"
+                           FontSize="20"/>
+
+                <ListView Grid.Row="1"
+                          x:Name="LogMessagesListView" 
+                          ItemsSource="{Binding LogMessages}" 
+                          SelectedItem="{Binding SelectedLogMessage, Mode=TwoWay}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="3">
+                                <Grid Width="150">
+                                    <TextBlock Text="{Binding Timestamp,Converter={StaticResource TimeToFormattedStringConverter}}"
+                                               FontSize="12"/>
+                                </Grid>
+                                <Grid Width="80">
+                                    <Border Background="{Binding Level, Converter={StaticResource LevelToBackgroundConverter}}" CornerRadius="3" HorizontalAlignment="Center" >
+                                        <TextBlock Text="{Binding Level, Converter={StaticResource EnumToStringConverter}}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center" 
+                                                   Padding="3,0" />
+                                    </Border>
+                                </Grid>
+                                <TextBlock Text="{Binding RenderedMessage}"
+                                           FontSize="12"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="2" Margin="0,8,0,0">
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center" Height="50">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <Button Command="{Binding FirstPageCommand}"
+                                    Content="First Page" Width="70" Margin="3,0" />
+                            <Button Command="{Binding PreviousPageCommand}"
+                                    Content="Prev Page" Width="70" Margin="3,0" />
+                            <Button Command="{Binding NextPageCommand}"
+                                    Content="Next Page" Width="70" Margin="3,0" />
+                            <Button Command="{Binding LastPageCommand}"
+                                    Content="Last Page" Width="70" Margin="3,0" />
                         </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
-        
+                        <TextBlock Text="{Binding CurrentPageText}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" 
+                Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}"
+                CornerRadius="10" 
+                BorderThickness="0"
+                Background="AntiqueWhite"
+                Margin="16,8"
+                Padding="16,8">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Log Details"
+                           FontSize="20"/>
+                <Grid Grid.Row="1">
+                    <ListView ItemsSource="{Binding SelectedLogEventProperties}" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" 
+                                               Margin="5,0" 
+                                               Width="150"/>
+                                    <TextBlock Text="{Binding Value}"
+                                               FontWeight="Bold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+
+        </Border>
+
     </Grid>
 </Window>
