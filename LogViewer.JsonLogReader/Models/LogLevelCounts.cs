@@ -1,4 +1,4 @@
-﻿namespace LogViewer.Server.Models
+﻿namespace LogViewer.JsonLogReader.Models
 {
     public class LogLevelCounts
     {

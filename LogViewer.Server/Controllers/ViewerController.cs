@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LogViewer.JsonLogReader.Models;
+using LogViewer.JsonLogReader.Parser;
 using LogViewer.Server.Extensions;
-using LogViewer.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace LogViewer.Server.Controllers
 {
@@ -12,12 +12,10 @@ namespace LogViewer.Server.Controllers
     [ApiController]
     public class ViewerController : ControllerBase
     {
-        private readonly ILogger<ViewerController> _logger;
         private readonly ILogParser _logParser;
 
-        public ViewerController(ILogger<ViewerController> logger, ILogParser logParser)
+        public ViewerController(ILogParser logParser)
         {
-            _logger = logger;
             _logParser = logParser;
         }
 

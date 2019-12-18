@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
-using LogViewer.Server.Models;
+using LogViewer.JsonLogReader.Models;
+using LogViewer.JsonLogReader.Parser;
 using NUnit.Framework;
 
 namespace LogViewer.Server.Tests

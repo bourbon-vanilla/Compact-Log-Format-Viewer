@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using LogViewer.JsonLogReader;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,8 @@ namespace LogViewer.Server
                 .AddMvcCore().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonFormatters();
 
-            services.AddSingleton<ILogParser, LogParser>();
+            services
+                .AddJsonLogReaderService();
         }
 
         public void Configure(IApplicationBuilder app)

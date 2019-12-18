@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace LogViewer.Server.Models
+namespace LogViewer.JsonLogReader.Models
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum SortOrder

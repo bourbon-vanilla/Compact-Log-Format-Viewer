@@ -1,0 +1,185 @@
+﻿<Window x:Class="LogViewer.Wpf.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LogViewer.Wpf.Client"
+        xmlns:converter="clr-namespace:LogViewer.Wpf.Client.Converter"
+        mc:Ignorable="d"
+        Title="{Binding OpenFilePath}" Height="800" Width="1200"
+        >
+    <Window.Resources>
+        <converter:TimeToFormattedStringConverter x:Key="TimeToFormattedStringConverter" />
+        <converter:LevelToBackgroundConverter x:Key="LevelToBackgroundConverter" />
+        <converter:EnumToStringConverter x:Key="EnumToStringConverter" />
+        <converter:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+    </Window.Resources>
+    
+    <Grid Background="AliceBlue">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="120" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="248" />
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0"
+                Content="Open file..."
+                Width="80"
+                Margin="16, 0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Command="{Binding OpenFileDialogCommand}"/>
+
+        <!--Filter-->
+        <Grid Grid.Row="1">
+            <Border CornerRadius="10" 
+                    BorderThickness="0"
+                    Background="LightBlue"
+                    Margin="16,8"
+                    Padding="1,1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" 
+                               Text="Filtering"
+                               FontSize="20"
+                               Margin="16, 10"/>
+                    <StackPanel Grid.Row="1" 
+                                Orientation="Horizontal" 
+                                Margin="16,0"
+                                Height="30" >
+                        <TextBox Text="{Binding FilterExpression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                 Width="600" 
+                                 FontSize="14"
+                                 Padding="5,0"
+                                 VerticalContentAlignment="Center"
+                                 BorderThickness="1,1,0,1" />
+                        <Button Width="25" Content="X" Command="{Binding RemoveFilterExpressionCommand}" BorderThickness="0,1,0,1" />
+                        <Button Width="50" Content="Filter" Command="{Binding ExecuteFilterExpressionCommand}" BorderThickness="0,1,1,1" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!--Log Events List-->
+        <Border Grid.Row="2" 
+                CornerRadius="10" 
+                BorderThickness="0"
+                Background="LightBlue"
+                Margin="16,8"
+                Padding="1,1">
+
+            <Grid Drop="UIElement_OnDrop" AllowDrop="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="56" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Logs Page"
+                           FontSize="20"
+                           Margin="16, 10"/>
+
+                <ListView Grid.Row="1"
+                          x:Name="LogMessagesListView" 
+                          BorderThickness="0"
+                          Padding="5"
+                          ItemsSource="{Binding LogMessages}" 
+                          SelectedItem="{Binding SelectedLogMessage, Mode=TwoWay}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="3">
+                                    <TextBlock Text="{Binding Timestamp,Converter={StaticResource TimeToFormattedStringConverter}}"
+                                               Width="120"
+                                               FontSize="12"/>
+                                <Grid Width="80">
+                                    <Border Background="{Binding Level, Converter={StaticResource LevelToBackgroundConverter}}" CornerRadius="3" HorizontalAlignment="Center" >
+                                        <TextBlock Text="{Binding Level, Converter={StaticResource EnumToStringConverter}}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="10"
+                                                   HorizontalAlignment="Center" 
+                                                   Padding="3,0" />
+                                    </Border>
+                                </Grid>
+                                <TextBlock Text="{Binding RenderedMessage}"
+                                           FontSize="12"
+                                           Margin="8,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="2" >
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center" >
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <Button Command="{Binding FirstPageCommand}"
+                                    Content="First Page" Width="70" Margin="3,0" />
+                            <Button Command="{Binding PreviousPageCommand}"
+                                    Content="Prev Page" Width="70" Margin="3,0" />
+                            <Button Command="{Binding NextPageCommand}"
+                                    Content="Next Page" Width="70" Margin="3,0" />
+                            <Button Command="{Binding LastPageCommand}"
+                                    Content="Last Page" Width="70" Margin="3,0" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding CurrentPageText}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Border>
+
+        <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
+
+        <!--Log Event Details-->
+        <Border Grid.Row="4" 
+                Visibility="{Binding LogEventSelected, Converter={StaticResource BoolToCollapsedConverter}}"
+                CornerRadius="10" 
+                BorderThickness="0"
+                Background="BurlyWood"
+                Margin="16,8"
+                Padding="1,1">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Log Details"
+                           FontSize="20"
+                           Margin="16, 10" />
+                <Grid Grid.Row="1">
+                    <ListView ItemsSource="{Binding SelectedLogEventProperties}"
+                              SelectedItem="{Binding SelectedLogEventProperty, Mode=TwoWay}"
+                              BorderThickness="0"
+                              Padding="5">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" 
+                                               Margin="5,0" 
+                                               Width="150"/>
+                                    <TextBlock Text="{Binding Value}"
+                                               FontWeight="Bold"
+                                               FontFamily="Consolas"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</Window>

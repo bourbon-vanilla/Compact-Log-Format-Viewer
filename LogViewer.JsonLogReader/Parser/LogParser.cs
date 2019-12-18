@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LogViewer.Server.Extensions;
-using LogViewer.Server.Models;
+using LogViewer.JsonLogReader.Extensions;
+using LogViewer.JsonLogReader.Models;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Core;
@@ -11,8 +11,7 @@ using Serilog.Events;
 using Serilog.Filters.Expressions;
 using Serilog.Formatting.Compact.Reader;
 
-
-namespace LogViewer.Server
+namespace LogViewer.JsonLogReader.Parser
 {
     public class LogParser : ILogParser
     {
@@ -61,6 +60,11 @@ namespace LogViewer.Server
             LogIsOpen = true;
 
             return _logItems;
+        }
+
+        public void ReadLogsTemp(string filePath)
+        {
+            ReadLogs(filePath);
         }
 
         public LogLevelCounts TotalCounts()

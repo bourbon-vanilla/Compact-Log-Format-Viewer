@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Serilog.Events;
-using System;
-using System.Collections.Generic;
 
-namespace LogViewer.Server.Models
+namespace LogViewer.JsonLogReader.Models
 {
     public class LogMessage
     {
