@@ -37,7 +37,7 @@ https://visualstudio.microsoft.com/vs/
 
 ### Build - WPF Client
 The easiest way to build the WPF Client is 
-- to get Visual Studio v >=16.3
+- to get Visual Studio Community v >=16.3
 - open the LogViewer.sln file
 - right-click on LogViewer.Wpf.Client project
 - select "Build" from the open context menu
