@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LogViewer.Wpf.Client"
         xmlns:converter="clr-namespace:LogViewer.Wpf.Client.Converter"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="{Binding OpenFilePath}"
         Height="800"
@@ -14,6 +15,7 @@
         <converter:LevelToBackgroundConverter x:Key="LevelToBackgroundConverter" />
         <converter:EnumToStringConverter x:Key="EnumToStringConverter" />
         <converter:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        <FontFamily x:Key="FontAwesome">pack://application:,,,/Resources/#FontAwesome</FontFamily>
     </Window.Resources>
 
     <Grid Background="AliceBlue">
@@ -61,13 +63,23 @@
                                  VerticalContentAlignment="Center"
                                  BorderThickness="1,1,0,1" />
                         <Button Width="25"
-                                Content="X"
                                 Command="{Binding RemoveFilterExpressionCommand}"
-                                BorderThickness="0,1,0,1" />
+                                BorderThickness="0,1,0,1" >
+                            <fa:ImageAwesome Icon="Remove"
+                                             Width="8"
+                                             Height="8"
+                                             Margin="4"
+                                             Foreground="Gray" />
+                        </Button>
                         <Button Width="50"
-                                Content="Filter"
                                 Command="{Binding ExecuteFilterExpressionCommand}"
-                                BorderThickness="0,1,1,1" />
+                                BorderThickness="0,1,1,1" >
+                            <fa:ImageAwesome Icon="Search"
+                                             Width="16"
+                                             Height="16"
+                                             Margin="4"
+                                             Foreground="Gray" />
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -133,21 +145,42 @@
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
                             <Button Command="{Binding FirstPageCommand}"
-                                    Content="First Page"
                                     Width="70"
-                                    Margin="3,0" />
+                                    Margin="3,0" >
+                                <fa:ImageAwesome Icon="AngleDoubleLeft"
+                                                 Width="8"
+                                                 Height="8"
+                                                 Margin="4"
+                                                 Foreground="Gray" />
+                            </Button>
                             <Button Command="{Binding PreviousPageCommand}"
-                                    Content="Prev Page"
                                     Width="70"
-                                    Margin="3,0" />
-                            <Button Command="{Binding NextPageCommand}"
-                                    Content="Next Page"
+                                    Margin="3,0">
+                                <fa:ImageAwesome Icon="AngleLeft"
+                                                 Width="8"
+                                                 Height="8"
+                                                 Margin="4"
+                                                 Foreground="Gray" />
+                            </Button>
+                                <Button Command="{Binding NextPageCommand}"
                                     Width="70"
-                                    Margin="3,0" />
+                                    Margin="3,0" >
+                                <fa:ImageAwesome Icon="AngleRight"
+                                                 Width="8"
+                                                 Height="8"
+                                                 Margin="4"
+                                                 Foreground="Gray" />
+                            </Button>
                             <Button Command="{Binding LastPageCommand}"
-                                    Content="Last Page"
                                     Width="70"
-                                    Margin="3,0" />
+                                    Margin="3,0" >
+                                <fa:ImageAwesome Icon="AngleDoubleRight"
+                                                 Width="8"
+                                                 Height="8"
+                                                 Margin="4"
+                                                 Foreground="Gray" />
+                            </Button>
+                            
                         </StackPanel>
                         <TextBlock Text="{Binding CurrentPageText}"
                                    HorizontalAlignment="Center" />
