@@ -35,7 +35,7 @@ https://visualstudio.microsoft.com/vs/
 
 >**Note:** If you `npm run start` before you have compiled the TypeScript files then Electron will complain about not finding the entry point file. Additionally if you have also not run `dotnet publish` then the underlying WebAPI which we communicate with will not be running.
 
-### Build - WPF Client
+### Build - WPF Client (prototype for now)
 The easiest way to build the WPF Client is 
 - to get Visual Studio Community v >=16.3
 - open the LogViewer.sln file
